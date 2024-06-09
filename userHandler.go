@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/coderharsx1122/rssscr/auth"
 	"github.com/coderharsx1122/rssscr/internal/database"
 	"github.com/google/uuid"
 )
@@ -41,16 +40,6 @@ func (apiCfg *apiConfig) createUserHandler(w http.ResponseWriter, r *http.Reques
 }
 
 // get user handler
-func (apiCfg *apiConfig) getUserHandler(w http.ResponseWriter, r *http.Request) {
-	apiKey, err := auth.GetApiKey(r.Header)
-	if err != nil {
-		respondWithError(w, 400, fmt.Sprintf("error:%v", err))
-	}
-
-	user, err := apiCfg.DB.GetUserByApiKey(r.Context(), apiKey)
-	if err != nil {
-		respondWithError(w, 400, fmt.Sprintf("error:%v", err))
-	}
-
-	respond(w, 200, user)
+func (apiCfg *apiConfig) getUserHandler(w http.ResponseWriter, r *http.Request, user database.User) {
+	respond(w, 200, dbUserToUser(user))
 }

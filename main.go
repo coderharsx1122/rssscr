@@ -65,7 +65,7 @@ func main() {
 	v1Router.Get("/ready", handleReq) // will handle function for only get request
 	v1Router.Get("/err", handleErr)
 	v1Router.Post("/users", apiCfg.createUserHandler)
-	v1Router.Get("/users", apiCfg.getUserHandler)
+	v1Router.Get("/users", apiCfg.authMiddleware(apiCfg.getUserHandler))
 
 	// mount v1Router at /v1
 	router.Mount("/v1", v1Router)
