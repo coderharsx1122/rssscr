@@ -41,3 +41,28 @@ func (cnf *apiConfig) createFeedHandler(w http.ResponseWriter, r *http.Request, 
 
 	respond(w, 200, dbFeedToFeed(feed))
 }
+
+func (cnf *apiConfig) getFeedHandler(w http.ResponseWriter, r *http.Request) {
+	type parameters struct {
+		Name string `json:"name"`
+		URL  string `json:"url"`
+	}
+
+	decoder := json.NewDecoder(r.Body)
+	params := parameters{}
+
+	err := decoder.Decode(&params)
+
+	if err != nil {
+		respondWithError(w, 400, fmt.Sprintf("error: %v", err))
+	}
+
+	feeds, err := cnf.DB.GetFeeds(r.Context())
+
+	if err != nil {
+		respondWithError(w, 400, fmt.Sprintf("Could't create user: %v", err))
+		return
+	}
+
+	respond(w, 200, dbFeedsToFeeds(feeds))
+}
