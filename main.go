@@ -20,6 +20,7 @@ type apiConfig struct {
 }
 
 func main() {
+
 	// load env file
 	godotenv.Load(".env")
 
